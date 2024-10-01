@@ -1,0 +1,16 @@
+{
+    "name": "yghareb/design_patterns",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Yghareb\\DesignPatterns\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yghareb",
+            "email": "yassergharieb14@gmail.com"
+        }
+    ],
+    "require": {}
+}
