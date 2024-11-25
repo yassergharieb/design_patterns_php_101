@@ -9,6 +9,6 @@ class HtmlTagsProccesor extends TextProccesorDecorator {
 
     public function proccesText(string $string ): string 
     {
-        return "<p>" .  $string . "</p>";  
+        return "<h1>" .  $string . "</h1>";  
     }
 } 
