@@ -4,6 +4,7 @@ use Yghareb\DesignPatterns\Decorator\BaseTextProccesor;
 use Yghareb\DesignPatterns\Decorator\HtmlTagsProccesor;
 use Yghareb\DesignPatterns\Decorator\UnderlineTextProccesor;
 use Yghareb\DesignPatterns\observer\Book;
+use Yghareb\DesignPatterns\observer\EventsList;
 use Yghareb\DesignPatterns\observer\Offer;
 use Yghareb\DesignPatterns\observer\OnlineBookStore;
 use Yghareb\DesignPatterns\observer\User;
@@ -24,11 +25,7 @@ require "vendor/autoload.php";
 //);
 
 
-$onlineMrket =  new OnlineBookStore(
-    new  Book('novel' ,  100) ,
-    new  User('yasser' , true , true) ,
-    new Offer('DISCOUNT OF 30%')
-);
-
-echo   $onlineMrket->addBook(new Book("book2" ,  100));
+$onlineMrket =  new OnlineBookStore();
+$onlineMrket->subscribe(new  User('SAYED') , [EventsList::NEW_PRODUCT , EventsList::NEW_OFFER]);
+echo   $onlineMrket->addBook(  new Book("book2" ,  100));
 echo   $onlineMrket->addOffer(new Offer("new offer begin" ));

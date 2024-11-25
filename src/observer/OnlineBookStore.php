@@ -6,53 +6,39 @@ class OnlineBookStore
 {
      public  array $books =  [];
 
-     public array $users =  [];
+     public array $subscribers =  [];
     public array $offers =  [];
 
 
-    public function __construct(Book $book, User $user , Offer $offer)
+    public function __construct()
     {
-        $this->addBook($book);
-//        var_dump($this->users);
-//        die();
-        $this->addUser($user);
-        $this->addOffer($offer);
+//        $this->addBook($book);
+//        $this->subscribe($user , $event);
+//        $this->addOffer($offer);
+        $this->initSubscribersEvents();
     }
 
 
     public  function  addBook(Book $book)
      {
          $this->books[]  =  $book;
-         $this->notifyUserForNewBook($book);
-     }
+         $this->notifySubscribers(   EventsList::NEW_PRODUCT ,   "new book is just arrived  " .  $book->getName() ." ".  "price :" .  $book->getPrice());     }
 
-
-
-     private function notifyUserForNewBook(Book $book)
-     {
-         $users  =  $this->getUsers();
-
-         foreach ($users as $user) {
-             if (!$user->isIsSubscribedToNewArrivalBooks()) {
-                 return;
-             }
-
-             $user->notifyNewBook($book);
-         }
-     }
-
-    private function notifyUserForNewOffer(Offer $offer)
+    public function addOffer(Offer $offer)
     {
-        $users  =  $this->getUsers();
 
-        foreach ($users as $user) {
-            if (!$user->isIsSubscribedToNewOffers()) {
-                return;
-            }
+        $this->offers[]  =  $offer;
+        $this->notifySubscribers(   EventsList::NEW_OFFER ,   $offer->getMessage());
+    }
 
-            $user->notifyNewOffer($offer);
+
+    public function notifySubscribers($event , $message)
+    {
+        foreach ( $this->subscribers[$event->value] as $subscriber )  {
+            $subscriber->notify($message);
         }
     }
+
 
      public function  getBooks()
      {
@@ -61,23 +47,23 @@ class OnlineBookStore
 
 
 
-    public  function  addUser(User $user)
+    public  function  subscribe(Subscriber  $user , array $events  )
     {
-        $this->users[]  =  $user;
+
+        foreach ($events as $event) {
+            $this->subscribers[$event->value][]  =  $user;
+        }
+
 
 
     }
 
 
-    public function  getUsers()
+    public function  initSubscribersEvents()
     {
-        return $this->users;
-    }
-
-    public function addOffer(Offer $offer)
-    {
-
-        $this->offers[]  =  $offer;
-        $this->notifyUserForNewOffer($offer);
+          $this->subscribers  =  [
+                   EventsList::NEW_OFFER->value =>  [],
+                   EventsList::NEW_PRODUCT->value => []
+          ];
     }
 }
